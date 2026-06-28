@@ -319,6 +319,138 @@
       .to('#hero-sub',   { opacity: 1, y: 0,      duration: 0.6, ease: 'power2.out' },    '-=0.2')
       .to('#hero-cta',   { scale: 1,  opacity: 1, duration: 0.7, ease: 'back.out(1.7)' }, '-=0.2')
       .to('#scroll-indicator', { opacity: 1, duration: 0.5 },                             '-=0.1');
+    /* ══ THREE.JS PARTICLE SYSTEM ══ */
+    (function initParticles() {
+      const COLORS = ['#FF2D9B', '#FFE600', '#00C2FF', '#9B2DFF', '#FF6B00', '#C8F135'];
+      const COUNT  = 35;
+
+      /* canvas overlay */
+      const canvas = document.createElement('canvas');
+      canvas.style.cssText = 'position:fixed;inset:0;z-index:999;pointer-events:none;';
+      document.body.appendChild(canvas);
+
+      /* renderer */
+      const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      renderer.setSize(window.innerWidth, window.innerHeight);
+
+      const scene  = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 100);
+      camera.position.z = 5;
+
+      /* build a round-dot texture per color */
+      function makeTexture(hex) {
+        const c = document.createElement('canvas');
+        c.width = c.height = 32;
+        const ctx = c.getContext('2d');
+        ctx.fillStyle = hex;
+        ctx.beginPath();
+        ctx.arc(16, 16, 16, 0, Math.PI * 2);
+        ctx.fill();
+        return new THREE.CanvasTexture(c);
+      }
+
+      /* particle data */
+      const particles = [];
+      const groups    = [];
+
+      for (let i = 0; i < COUNT; i++) {
+        const hex     = COLORS[Math.floor(Math.random() * COLORS.length)];
+        const size    = 0.05 + Math.random() * 0.13;
+        const geo     = new THREE.BufferGeometry();
+        const pos     = new Float32Array(3);
+        pos[0] = (Math.random() - 0.5) * 10;
+        pos[1] = (Math.random() - 0.5) * 8 + 4;
+        pos[2] = (Math.random() - 0.5) * 2;
+        geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+
+        const mat = new THREE.PointsMaterial({
+          size,
+          map: makeTexture(hex),
+          transparent: true,
+          depthWrite: false,
+          alphaTest: 0.1,
+        });
+
+        const point = new THREE.Points(geo, mat);
+        scene.add(point);
+
+        particles.push({
+          mesh:  point,
+          pos,
+          vy:    -(0.005 + Math.random() * 0.012),
+          vx:    (Math.random() - 0.5) * 0.003,
+          rot:   (Math.random() - 0.5) * 0.02,
+          pushX: 0,
+          pushY: 0,
+        });
+      }
+
+      /* mouse → world coords */
+      const mouse = new THREE.Vector2(9999, 9999);
+      window.addEventListener('mousemove', e => {
+        mouse.x =  (e.clientX / window.innerWidth  - 0.5) * 2;
+        mouse.y = -(e.clientY / window.innerHeight - 0.5) * 2;
+      });
+
+      function screenToWorld(nx, ny) {
+        const fovRad  = camera.fov * Math.PI / 180;
+        const halfH   = Math.tan(fovRad / 2) * camera.position.z;
+        const halfW   = halfH * camera.aspect;
+        return { wx: nx * halfW, wy: ny * halfH };
+      }
+
+      /* resize */
+      window.addEventListener('resize', () => {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+      });
+
+      /* animate */
+      const clock = new THREE.Clock();
+      let lastTime = 0;
+
+      function animate(now) {
+        requestAnimationFrame(animate);
+        const delta = clock.getDelta();
+        if (delta < 1 / 55) {
+          const { wx, wy } = screenToWorld(mouse.x, mouse.y);
+
+          for (let i = 0; i < COUNT; i++) {
+            const p   = particles[i];
+            const pos = p.pos;
+
+            /* mouse repulsion */
+            const dx = pos[0] - wx;
+            const dy = pos[1] - wy;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+            if (dist < 1.5 && dist > 0) {
+              const force = (1.5 - dist) / 1.5 * 0.08;
+              p.pushX += (dx / dist) * force;
+              p.pushY += (dy / dist) * force;
+            }
+            p.pushX *= 0.92;
+            p.pushY *= 0.92;
+
+            pos[0] += p.vx + p.pushX;
+            pos[1] += p.vy + p.pushY;
+            p.mesh.rotation.z += p.rot;
+
+            /* wrap when below view */
+            if (pos[1] < -5) {
+              pos[1] = 5 + Math.random();
+              pos[0] = (Math.random() - 0.5) * 10;
+            }
+
+            p.mesh.geometry.attributes.position.needsUpdate = true;
+          }
+        }
+        renderer.render(scene, camera);
+      }
+
+      animate(0);
+    })();
   </script>
 
 </body>

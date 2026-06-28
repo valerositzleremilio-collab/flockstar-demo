@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="FLOCKSTAR – Das Frühstück das dich anschaut. Himbeer Joghurt mit Schokostückchen." />
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
+
+  <!-- GSAP 3.12.5 + ScrollTrigger -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+  <!-- Three.js r128 -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+  <title>FLOCKSTAR</title>
+
+  <style>
+    /* ══ TOKENS ══ */
+    :root {
+      --pink:   #FF2D9B;
+      --yellow: #FFE600;
+      --blue:   #00C2FF;
+      --purple: #9B2DFF;
+      --orange: #FF6B00;
+      --dark:   #1a0028;
+      --white:  #FFFFFF;
+    }
+
+    /* ══ RESET ══ */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: var(--white);
+      overflow-x: hidden;
+    }
+
+    img {
+      display: block;
+      max-width: 100%;
+    }
+
+    /* ══ KEYFRAMES ══ */
+    @keyframes floatBox {
+      from { transform: translateY(0); }
+      to   { transform: translateY(-22px); }
+    }
+
+    @keyframes floatChar {
+      from { transform: translateY(0) rotate(-2deg); }
+      to   { transform: translateY(-18px) rotate(2deg); }
+    }
+
+    @keyframes spin360 {
+      from { transform: rotate(0deg); }
+      to   { transform: rotate(360deg); }
+    }
+
+    @keyframes wobble {
+      from { transform: rotate(-3deg); }
+      to   { transform: rotate(3deg); }
+    }
+
+    @keyframes floatHeart {
+      0%   { transform: translateY(0);    opacity: 0; }
+      20%  { opacity: 1; }
+      100% { transform: translateY(-60px); opacity: 0; }
+    }
+
+    @keyframes bounce {
+      from { transform: translateY(0); }
+      to   { transform: translateY(-8px); }
+    }
+
+    @keyframes pulse-ring {
+      0%   { box-shadow: 0 0 0 0   rgba(255, 45, 155, 0.6); }
+      70%  { box-shadow: 0 0 0 18px rgba(255, 45, 155, 0);   }
+      100% { box-shadow: 0 0 0 0   rgba(255, 45, 155, 0);   }
+    }
+
+    /* ══ NAV ══ */
+    #nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 64px;
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom: 3px solid var(--yellow);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 clamp(20px, 5vw, 80px);
+      z-index: 100;
+      transform: translateY(-100%);
+    }
+
+    #nav img {
+      height: 40px;
+      width: auto;
+    }
+
+    .nav-cta {
+      font-family: 'Fredoka One', cursive;
+      font-size: 18px;
+      color: var(--white);
+      background: var(--pink);
+      text-decoration: none;
+      border-radius: 50px;
+      padding: 10px 28px;
+      transition: background 0.2s ease, transform 0.2s ease;
+    }
+
+    .nav-cta:hover {
+      background: var(--purple);
+      transform: scale(1.05);
+    }
+
+    /* ══ HERO ══ */
+    #hero {
+      min-height: 100vh;
+      padding: 100px clamp(20px, 5vw, 80px) 60px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .hero-stage {
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      gap: clamp(20px, 4vw, 60px);
+      width: 100%;
+    }
+
+    #hero-box {
+      width: clamp(200px, 28vw, 380px);
+      animation: floatBox 3s ease-in-out infinite alternate;
+      filter: drop-shadow(0 30px 40px rgba(255, 45, 155, 0.25));
+      transition: transform 0.3s ease;
+      cursor: pointer;
+    }
+
+    #hero-box:hover {
+      transform: rotate(5deg) scale(1.05);
+      animation-play-state: paused;
+    }
+
+    #hero-char {
+      width: clamp(160px, 22vw, 300px);
+      mix-blend-mode: multiply;
+      animation: floatChar 2.5s ease-in-out infinite alternate;
+      animation-delay: 0.6s;
+    }
+
+    .hero-copy {
+      text-align: center;
+      max-width: 800px;
+      margin-top: 40px;
+    }
+
+    .hero-headline {
+      font-family: 'Fredoka One', cursive;
+      font-size: clamp(36px, 7vw, 88px);
+      line-height: 1.1;
+      color: var(--dark);
+      margin-bottom: 20px;
+    }
+
+    .word {
+      display: inline-block;
+      overflow: hidden;
+      margin: 0 6px;
+    }
+
+    .word-inner {
+      display: inline-block;
+      transform: translateY(120%);
+      opacity: 0;
+    }
+
+    .highlight {
+      background: linear-gradient(135deg, var(--pink), var(--purple));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    #hero-sub {
+      font-family: 'Nunito', sans-serif;
+      font-weight: 700;
+      font-size: clamp(16px, 2.5vw, 24px);
+      color: var(--purple);
+      margin-bottom: 36px;
+      opacity: 0;
+      transform: translateY(20px);
+    }
+
+    #hero-cta {
+      display: inline-block;
+      font-family: 'Fredoka One', cursive;
+      font-size: clamp(20px, 2.5vw, 28px);
+      color: var(--white);
+      background: var(--pink);
+      text-decoration: none;
+      padding: 16px 56px;
+      border-radius: 60px;
+      animation: pulse-ring 2s infinite;
+      transform: scale(0);
+      opacity: 0;
+      margin-bottom: 28px;
+      transition: background 0.2s ease, transform 0.2s ease;
+    }
+
+    #hero-cta:hover {
+      background: var(--purple);
+    }
+
+    #scroll-indicator {
+      display: block;
+      font-family: 'Nunito', sans-serif;
+      font-weight: 700;
+      font-size: 14px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--pink);
+      animation: bounce 1.5s ease-in-out infinite alternate;
+      opacity: 0;
+      margin-top: 8px;
+    }
+
+    /* ══ STORY ══ */
+    #story {
+      /* placeholder */
+    }
+
+    /* ══ FLAVOR ══ */
+    #flavor {
+      /* placeholder */
+    }
+
+    /* ══ REVIEWS ══ */
+    #reviews {
+      /* placeholder */
+    }
+
+    /* ══ FOOTER ══ */
+    #footer-section {
+      /* placeholder */
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ══ NAV ══ -->
+  <nav id="nav">
+    <img src="logo.png" alt="FLOCKSTAR Logo" />
+    <a href="#" class="nav-cta">Jetzt snacken 🍓</a>
+  </nav>
+
+  <!-- ══ HERO ══ -->
+  <section id="hero">
+    <div class="hero-stage">
+      <img src="box.png" id="hero-box" alt="FLOCKSTAR Box" />
+      <img src="char-headspin.png" id="hero-char" alt="FLOCKSTAR Character" />
+    </div>
+    <div class="hero-copy">
+      <h1 class="hero-headline">
+        <span class="word"><span class="word-inner">Das</span></span>
+        <span class="word"><span class="word-inner highlight">Frühstück</span></span>
+        <span class="word"><span class="word-inner">das</span></span>
+        <span class="word"><span class="word-inner">dich</span></span>
+        <span class="word"><span class="word-inner highlight">anschaut.</span></span>
+      </h1>
+      <p id="hero-sub">Himbeer Joghurt mit Schokostückchen – NEU! Explosive Frucht!</p>
+      <a href="#" id="hero-cta">Jetzt snacken 🍓</a>
+      <span id="scroll-indicator">↓ scroll</span>
+    </div>
+  </section>
+
+  <!-- ══ STORY ══ -->
+  <section id="story"></section>
+
+  <!-- ══ FLAVOR ══ -->
+  <section id="flavor"></section>
+
+  <!-- ══ REVIEWS ══ -->
+  <section id="reviews"></section>
+
+  <!-- ══ FOOTER ══ -->
+  <footer id="footer-section"></footer>
+
+  <script>
+    gsap.registerPlugin(ScrollTrigger);
+
+    /* ══ INITIAL STATES ══ */
+    gsap.set('#hero-box',  { scale: 0.3, opacity: 0 });
+    gsap.set('#hero-char', { x: 80, opacity: 0 });
+    gsap.set('#hero-cta',  { scale: 0, opacity: 0 });
+
+    /* ══ PAGE LOAD TIMELINE ══ */
+    const tl = gsap.timeline();
+
+    tl.to('#nav',        { y: 0,      duration: 0.7, delay: 0.2, ease: 'power2.out' })
+      .to('#hero-box',   { scale: 1,  opacity: 1, duration: 0.8, ease: 'back.out(1.4)' }, '-=0.3')
+      .to('#hero-char',  { x: 0,      opacity: 1, duration: 0.7, ease: 'power2.out' },    '-=0.5')
+      .to('.word-inner', { y: 0,      opacity: 1, stagger: 0.12, duration: 0.7, ease: 'power3.out' }, '-=0.4')
+      .to('#hero-sub',   { opacity: 1, y: 0,      duration: 0.6, ease: 'power2.out' },    '-=0.2')
+      .to('#hero-cta',   { scale: 1,  opacity: 1, duration: 0.7, ease: 'back.out(1.7)' }, '-=0.2')
+      .to('#scroll-indicator', { opacity: 1, duration: 0.5 },                             '-=0.1');
+  </script>
+
+</body>
+</html>

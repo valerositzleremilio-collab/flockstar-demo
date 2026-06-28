@@ -19,6 +19,23 @@
 
   <title>FLOCKSTAR</title>
 
+  <!-- SEO -->
+  <meta name="og:title"       content="FLOCKSTAR – Das Frühstück das dich anschaut" />
+  <meta name="og:description" content="Himbeer Joghurt mit Schokostückchen. NEU!" />
+  <meta name="og:type"        content="website" />
+  <meta name="theme-color"    content="#FF2D9B" />
+  <link rel="canonical"       href="https://flockstar.de" />
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "name": "FLOCKSTAR Himbeer Joghurt",
+    "brand": { "@type": "Brand", "name": "FLOCKSTAR" },
+    "description": "Himbeer Joghurt mit Schokostückchen"
+  }
+  </script>
+
   <style>
     /* ══ TOKENS ══ */
     :root {
@@ -240,24 +257,340 @@
       margin-top: 8px;
     }
 
+    /* ══ DIVIDERS ══ */
+    .divider {
+      display: block;
+      width: 100%;
+      line-height: 0;
+    }
+
     /* ══ STORY ══ */
     #story {
-      /* placeholder */
+      background: var(--pink);
+      padding: 80px clamp(20px, 5vw, 80px);
+    }
+
+    .story-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      max-width: 1100px;
+      margin: 0 auto;
+      align-items: center;
+    }
+
+    .story-text {
+      color: var(--white);
+    }
+
+    .story-eyebrow {
+      font-family: 'Nunito', sans-serif;
+      font-weight: 800;
+      font-size: 15px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+      opacity: 0.85;
+    }
+
+    .story-text h2 {
+      font-family: 'Fredoka One', cursive;
+      font-size: clamp(36px, 5.5vw, 68px);
+      line-height: 1.1;
+      margin-bottom: 24px;
+    }
+
+    .story-text p {
+      font-size: clamp(16px, 1.8vw, 20px);
+      line-height: 1.7;
+      margin-bottom: 16px;
+      opacity: 0.92;
+    }
+
+    .story-punchline {
+      font-weight: 800;
+      font-style: italic;
+    }
+
+    .story-visuals {
+      position: relative;
+      min-height: 360px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #char-spin {
+      width: clamp(220px, 30vw, 360px);
+      mix-blend-mode: multiply;
+      animation: spin360 1.8s linear infinite;
+      filter: drop-shadow(0 0 30px rgba(255, 230, 0, 0.6));
+      position: absolute;
+    }
+
+    #char-fall {
+      width: clamp(220px, 30vw, 360px);
+      mix-blend-mode: multiply;
+      opacity: 0;
+      animation: wobble 1s ease-in-out infinite alternate;
+      animation-play-state: paused;
+      position: absolute;
+    }
+
+    @media (max-width: 680px) {
+      .story-inner {
+        grid-template-columns: 1fr;
+      }
+      .story-visuals {
+        min-height: 260px;
+      }
     }
 
     /* ══ FLAVOR ══ */
     #flavor {
-      /* placeholder */
+      background: var(--yellow);
+      padding: 80px clamp(20px, 5vw, 80px);
+      text-align: center;
     }
+
+    .flavor-eyebrow {
+      font-family: 'Nunito', sans-serif;
+      font-weight: 900;
+      font-size: 16px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--purple);
+      margin-bottom: 16px;
+    }
+
+    #flavor h2 {
+      font-family: 'Fredoka One', cursive;
+      font-size: clamp(48px, 8vw, 100px);
+      color: var(--dark);
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+
+    #flavor h3 {
+      font-family: 'Fredoka One', cursive;
+      font-size: clamp(28px, 4.8vw, 60px);
+      color: var(--purple);
+      margin-bottom: 48px;
+    }
+
+    .flavor-stage {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 48px;
+    }
+
+    .spotlight {
+      position: absolute;
+      width: 260px;
+      height: 260px;
+      border-radius: 50%;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .spotlight-1 { background: radial-gradient(circle, rgba(255,45,155,0.35) 0%, transparent 70%);  top: -40px; left: -60px; }
+    .spotlight-2 { background: radial-gradient(circle, rgba(0,194,255,0.3) 0%, transparent 70%);   top: -40px; right: -60px; }
+    .spotlight-3 { background: radial-gradient(circle, rgba(155,45,255,0.3) 0%, transparent 70%);  bottom: -40px; left: -40px; }
+    .spotlight-4 { background: radial-gradient(circle, rgba(255,107,0,0.3) 0%, transparent 70%);   bottom: -40px; right: -40px; }
+
+    #flavor-box {
+      width: clamp(220px, 30vw, 380px);
+      position: relative;
+      z-index: 2;
+      cursor: pointer;
+      animation: rotateBox3D 8s linear infinite;
+      transform-style: preserve-3d;
+    }
+
+    @keyframes rotateBox3D {
+      0%   { transform: rotateY(0deg)   scale(1); }
+      45%  { transform: rotateY(162deg) scale(0.88); }
+      50%  { transform: rotateY(180deg) scale(0.85); }
+      55%  { transform: rotateY(198deg) scale(0.88); }
+      100% { transform: rotateY(360deg) scale(1); }
+    }
+
+    #flavor-box:hover {
+      animation-play-state: paused;
+    }
+
+    .flavor-badges {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 16px;
+    }
+
+    .badge {
+      font-family: 'Fredoka One', cursive;
+      font-size: clamp(16px, 2vw, 22px);
+      padding: 14px 28px;
+      border-radius: 60px;
+      opacity: 0;
+      transform: translateY(30px);
+    }
+
+    .badge-1 { background: var(--pink);   color: var(--white); }
+    .badge-2 { background: var(--dark);   color: var(--white); }
+    .badge-3 { background: var(--blue);   color: var(--white); }
 
     /* ══ REVIEWS ══ */
     #reviews {
-      /* placeholder */
+      background: var(--purple);
+      padding: 80px clamp(20px, 5vw, 80px);
+      text-align: center;
+    }
+
+    #reviews h2 {
+      font-family: 'Fredoka One', cursive;
+      font-size: clamp(36px, 5.5vw, 64px);
+      color: var(--white);
+      margin-bottom: 48px;
+    }
+
+    .reviews-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .review-card {
+      background: var(--white);
+      border-radius: 24px;
+      padding: 32px;
+      text-align: left;
+      opacity: 0;
+      transform: translateY(50px);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      cursor: default;
+    }
+
+    .review-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+    }
+
+    .review-stars {
+      font-size: 22px;
+      color: var(--yellow);
+      margin-bottom: 14px;
+    }
+
+    .review-text {
+      font-size: 16px;
+      line-height: 1.6;
+      color: var(--dark);
+      margin-bottom: 16px;
+    }
+
+    .review-author {
+      font-family: 'Nunito', sans-serif;
+      font-weight: 800;
+      font-size: 14px;
+      color: var(--purple);
     }
 
     /* ══ FOOTER ══ */
     #footer-section {
-      /* placeholder */
+      background: var(--dark);
+      padding: 70px clamp(20px, 5vw, 80px) 0;
+      text-align: center;
+    }
+
+    .footer-logo {
+      height: 60px;
+      width: auto;
+      margin: 0 auto 20px;
+    }
+
+    .footer-tagline {
+      font-family: 'Fredoka One', cursive;
+      font-size: clamp(16px, 2.5vw, 22px);
+      color: rgba(255, 255, 255, 0.55);
+      margin-bottom: 40px;
+    }
+
+    .footer-char-wrap {
+      position: relative;
+      display: inline-block;
+      margin-bottom: 0;
+    }
+
+    #footer-char {
+      width: clamp(180px, 25vw, 320px);
+      mix-blend-mode: multiply;
+      display: block;
+    }
+
+    .heart {
+      position: absolute;
+      font-size: 28px;
+      animation: floatHeart 2s ease-out infinite;
+      pointer-events: none;
+    }
+
+    .heart-1 { left: -10px; top: 20px; animation-delay: 0s;   }
+    .heart-2 { left: 50%;   top: 0px;  animation-delay: 0.5s; }
+    .heart-3 { right: -10px;top: 30px; animation-delay: 1s;   }
+
+    .footer-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding-top: 20px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      margin-top: 32px;
+    }
+
+    .footer-bar span,
+    .footer-bar a {
+      font-family: 'Nunito', sans-serif;
+      font-size: 13px;
+      color: rgba(255, 255, 255, 0.35);
+      text-decoration: none;
+    }
+
+    .footer-bar a:hover {
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    /* ══ RESPONSIVE ══ */
+    @media (max-width: 700px) {
+      .story-inner {
+        grid-template-columns: 1fr;
+      }
+
+      .story-visuals {
+        order: -1;
+      }
+
+      #hero-char {
+        display: none;
+      }
+
+      .reviews-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* ══ REDUCED MOTION ══ */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
     }
   </style>
 </head>
@@ -289,17 +622,98 @@
     </div>
   </section>
 
+  <!-- divider: hero → story (white → pink) -->
+  <svg class="divider" viewBox="0 0 1440 80" preserveAspectRatio="none" style="background:var(--white);">
+    <path d="M0,20 C360,80 1080,0 1440,20 L1440,80 L0,80 Z" fill="var(--pink)" />
+  </svg>
+
   <!-- ══ STORY ══ -->
-  <section id="story"></section>
+  <section id="story">
+    <div class="story-inner">
+      <div class="story-text">
+        <p class="story-eyebrow">🍓 Wer ist FLOCKSTAR?</p>
+        <h2>Zu gut um wahr zu sein.</h2>
+        <p>FLOCKSTAR ist nicht einfach Frühstück. Es ist ein Statement. Ein Lebensgefühl. Ein kleiner Kerl auf der Schachtel, der dich jeden Morgen anschaut und fragt: <em>Bist du bereit?</em></p>
+        <p>Echte Himbeeren. Echte Schokostückchen. Echter Joghurt-Geschmack. Alles in einer Bowl. <span class="story-punchline">...na ja, fast immer. 😅</span></p>
+      </div>
+      <div class="story-visuals">
+        <img src="char-headspin.png" id="char-spin" alt="FLOCKSTAR Charakter spinnt" />
+        <img src="char-fallen.png"   id="char-fall" alt="FLOCKSTAR Charakter gefallen" />
+      </div>
+    </div>
+  </section>
+
+  <!-- divider: story → flavor (pink → yellow) -->
+  <svg class="divider" viewBox="0 0 1440 80" preserveAspectRatio="none" style="background:var(--pink);">
+    <path d="M0,60 C480,0 960,80 1440,20 L1440,80 L0,80 Z" fill="var(--yellow)" />
+  </svg>
 
   <!-- ══ FLAVOR ══ -->
-  <section id="flavor"></section>
+  <section id="flavor">
+    <p class="flavor-eyebrow">✨ Unsere Sorte ✨</p>
+    <h2>Himbeer Joghurt</h2>
+    <h3>mit Schokostückchen</h3>
+    <div class="flavor-stage">
+      <div class="spotlight spotlight-1"></div>
+      <div class="spotlight spotlight-2"></div>
+      <div class="spotlight spotlight-3"></div>
+      <div class="spotlight spotlight-4"></div>
+      <img src="box.png" id="flavor-box" alt="FLOCKSTAR Box" />
+    </div>
+    <div class="flavor-badges">
+      <div class="badge badge-1">🍓 Echte Himbeeren</div>
+      <div class="badge badge-2">🍫 Schokostückchen</div>
+      <div class="badge badge-3">🥛 Joghurt Geschmack</div>
+    </div>
+  </section>
+
+  <!-- divider: flavor → reviews (yellow → purple) -->
+  <svg class="divider" viewBox="0 0 1440 80" preserveAspectRatio="none" style="background:var(--yellow);">
+    <path d="M0,40 C300,0 800,80 1440,30 L1440,80 L0,80 Z" fill="var(--purple)" />
+  </svg>
 
   <!-- ══ REVIEWS ══ -->
-  <section id="reviews"></section>
+  <section id="reviews">
+    <h2>Was alle sagen: 💬</h2>
+    <div class="reviews-grid">
+      <div class="review-card">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">"Endlich ein Frühstück das ich NICHT verstecken muss wenn Freunde kommen."</p>
+        <p class="review-author">— Leon, 16</p>
+      </div>
+      <div class="review-card">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">"Hab das Maskottchen heute morgen um 7 Uhr angewunken. Keine Reue."</p>
+        <p class="review-author">— Sarah, 24</p>
+      </div>
+      <div class="review-card">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">"Meine Mutter hasst ihn. Mein Freundeskreis liebt ihn. Das sagt alles."</p>
+        <p class="review-author">— Max, 19</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- divider: reviews → footer (purple → dark) -->
+  <svg class="divider" viewBox="0 0 1440 80" preserveAspectRatio="none" style="background:var(--purple);">
+    <path d="M0,20 C500,80 900,0 1440,50 L1440,80 L0,80 Z" fill="var(--dark)" />
+  </svg>
 
   <!-- ══ FOOTER ══ -->
-  <footer id="footer-section"></footer>
+  <footer id="footer-section">
+    <img src="logo.png" class="footer-logo" alt="FLOCKSTAR" />
+    <p class="footer-tagline">Das Frühstück das zurückschaut.</p>
+    <div class="footer-char-wrap">
+      <img src="char-footer.png" id="footer-char" alt="FLOCKSTAR Charakter" />
+      <span class="heart heart-1">💖</span>
+      <span class="heart heart-2">💛</span>
+      <span class="heart heart-3">💜</span>
+    </div>
+    <div class="footer-bar">
+      <span>© 2026 FLOCKSTAR</span>
+      <a href="https://oddomode.de" target="_blank" rel="noopener">Made with 🍓 by Oddomode →oddomode.de</a>
+    </div>
+  </footer>
 
   <script>
     gsap.registerPlugin(ScrollTrigger);
@@ -319,6 +733,77 @@
       .to('#hero-sub',   { opacity: 1, y: 0,      duration: 0.6, ease: 'power2.out' },    '-=0.2')
       .to('#hero-cta',   { scale: 1,  opacity: 1, duration: 0.7, ease: 'back.out(1.7)' }, '-=0.2')
       .to('#scroll-indicator', { opacity: 1, duration: 0.5 },                             '-=0.1');
+    /* ══ STORY — text slide in ══ */
+    gsap.from('.story-text', {
+      x: -60,
+      opacity: 0,
+      duration: 0.9,
+      ease: 'power3.out',
+      scrollTrigger: {
+        trigger: '#story',
+        start: 'top 70%',
+      }
+    });
+
+    /* ══ STORY — char swap at 40% ══ */
+    gsap.set('#char-fall', { opacity: 0 });
+
+    ScrollTrigger.create({
+      trigger: '#story',
+      start: '40% center',
+      onEnter() {
+        gsap.to('#char-spin', { opacity: 0, duration: 0.4 });
+        gsap.to('#char-fall', {
+          opacity: 1,
+          duration: 0.6,
+          ease: 'back.out(1.4)',
+          onStart() { document.getElementById('char-fall').style.animationPlayState = 'running'; }
+        });
+      },
+      onLeaveBack() {
+        gsap.to('#char-fall', { opacity: 0, duration: 0.3 });
+        gsap.to('#char-spin', { opacity: 1, duration: 0.5 });
+        document.getElementById('char-fall').style.animationPlayState = 'paused';
+      }
+    });
+
+    /* ══ FLAVOR — spotlights stagger ══ */
+    gsap.to('.spotlight', {
+      opacity: 1,
+      duration: 0.6,
+      stagger: 0.3,
+      scrollTrigger: {
+        trigger: '#flavor',
+        start: 'top 70%',
+      }
+    });
+
+    /* ══ FLAVOR — badges stagger ══ */
+    gsap.to('.badge', {
+      opacity: 1,
+      y: 0,
+      duration: 0.6,
+      stagger: 0.15,
+      ease: 'back.out(1.3)',
+      scrollTrigger: {
+        trigger: '.flavor-badges',
+        start: 'top 80%',
+      }
+    });
+
+    /* ══ REVIEWS — cards stagger ══ */
+    gsap.to('.review-card', {
+      opacity: 1,
+      y: 0,
+      duration: 0.7,
+      stagger: 0.2,
+      ease: 'power3.out',
+      scrollTrigger: {
+        trigger: '#reviews',
+        start: 'top 70%',
+      }
+    });
+
     /* ══ THREE.JS PARTICLE SYSTEM ══ */
     (function initParticles() {
       const COLORS = ['#FF2D9B', '#FFE600', '#00C2FF', '#9B2DFF', '#FF6B00', '#C8F135'];

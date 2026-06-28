@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="FLOCKSTAR – Das Frühstück das dich anschaut. Himbeer Joghurt mit Schokostückchen." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <title>FLOCKSTAR</title>
+  <meta name="og:title" content="FLOCKSTAR – Das Frühstück das dich anschaut" />
+  <meta name="og:description" content="Himbeer Joghurt mit Schokostückchen. NEU!" />
+  <meta name="og:type" content="website" />
+  <meta name="theme-color" content="#FF2D9B" />
+  <link rel="canonical" href="https://flockstar.de" />
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Product","name":"FLOCKSTAR Himbeer Joghurt","brand":{"@type":"Brand","name":"FLOCKSTAR"},"description":"Himbeer Joghurt mit Schokostückchen"}</script>
+  <style>
+    :root{--pink:#FF2D9B;--yellow:#FFE600;--blue:#00C2FF;--purple:#9B2DFF;--orange:#FF6B00;--dark:#1a0028;--white:#FFFFFF;--pink-rgb:255,45,155;--yellow-rgb:255,230,0;--blue-rgb:0,194,255;--purple-rgb:155,45,255;--orange-rgb:255,107,0;--white-rgb:255,255,255}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:'Nunito',sans-serif;background:var(--white);overflow-x:hidden}
+    img{display:block;max-width:100%}
+    @keyframes floatBox{from{transform:translateY(0)}to{transform:translateY(-22px)}}
+    @keyframes floatChar{from{transform:translateY(0) rotate(-2deg)}to{transform:translateY(-18px) rotate(2deg)}}
+    @keyframes spin360{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+    @keyframes wobble{from{transform:rotate(-3deg)}to{transform:rotate(3deg)}}
+    @keyframes floatHeart{0%{transform:translateY(0);opacity:0}20%{opacity:1}100%{transform:translateY(-60px);opacity:0}}
+    @keyframes bounce{from{transform:translateY(0)}to{transform:translateY(-8px)}}
+    @keyframes pulse-ring{0%{box-shadow:0 0 0 0 rgba(var(--pink-rgb),0.6)}70%{box-shadow:0 0 0 18px rgba(var(--pink-rgb),0)}100%{box-shadow:0 0 0 0 rgba(var(--pink-rgb),0)}}
+    @keyframes rotateBox3D{0%{transform:rotateY(0deg) scale(1)}45%{transform:rotateY(162deg) scale(0.88)}50%{transform:rotateY(180deg) scale(0.85)}55%{transform:rotateY(198deg) scale(0.88)}100%{transform:rotateY(360deg) scale(1)}}
+    #nav{position:fixed;top:0;left:0;right:0;height:64px;background:rgba(var(--white-rgb),0.92);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:3px solid var(--yellow);display:flex;align-items:center;justify-content:space-between;padding:0 clamp(20px,5vw,80px);z-index:100;transform:translateY(-100%)}
+    #nav img{height:40px;width:auto}
+    .nav-cta{font-family:'Fredoka One',cursive;font-size:18px;color:var(--white);background:var(--pink);text-decoration:none;border-radius:50px;padding:10px 28px;transition:background 0.2s,transform 0.2s}
+    .nav-cta:hover{background:var(--purple);transform:scale(1.05)}
+    #hero{min-height:100vh;padding:100px clamp(20px,5vw,80px) 60px;display:flex;flex-direction:column;align-items:center}
+    .hero-stage{display:flex;align-items:flex-end;justify-content:center;gap:clamp(20px,4vw,60px);width:100%}
+    #hero-box{width:clamp(200px,28vw,380px);animation:floatBox 3s ease-in-out infinite alternate;filter:drop-shadow(0 30px 40px rgba(var(--pink-rgb),0.25));transition:transform 0.3s;cursor:pointer}
+    #hero-box:hover{transform:rotate(5deg) scale(1.05);animation-play-state:paused}
+    #hero-char{width:clamp(160px,22vw,300px);mix-blend-mode:multiply;animation:floatChar 2.5s ease-in-out infinite alternate;animation-delay:0.6s}
+    .hero-copy{text-align:center;max-width:800px;margin-top:40px}
+    .hero-headline{font-family:'Fredoka One',cursive;font-size:clamp(36px,7vw,88px);line-height:1.1;color:var(--dark);margin-bottom:20px}
+    .word{display:inline-block;overflow:hidden;margin:0 6px}
+    .word-inner{display:inline-block;transform:translateY(120%);opacity:0}
+    .highlight{background:linear-gradient(135deg,var(--pink),var(--purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+    #hero-sub{font-family:'Nunito',sans-serif;font-weight:700;font-size:clamp(16px,2.5vw,24px);color:var(--purple);margin-bottom:36px;opacity:0;transform:translateY(20px)}
+    #hero-cta{display:inline-block;font-family:'Fredoka One',cursive;font-size:clamp(20px,2.5vw,28px);color:var(--white);background:var(--pink);text-decoration:none;padding:16px 56px;border-radius:60px;animation:pulse-ring 2s infinite;transform:scale(0);opacity:0;margin-bottom:28px;transition:background 0.2s,transform 0.2s}
+    #hero-cta:hover{background:var(--purple)}
+    #scroll-indicator{display:block;font-family:'Nunito',sans-serif;font-weight:700;font-size:14px;letter-spacing:3px;text-transform:uppercase;color:var(--pink);animation:bounce 1.5s ease-in-out infinite alternate;opacity:0;margin-top:8px}
+    .divider{display:block;width:100%;line-height:0}
+    #story{background:var(--pink);padding:80px clamp(20px,5vw,80px)}
+    .story-inner{display:grid;grid-template-columns:1fr 1fr;gap:60px;max-width:1100px;margin:0 auto;align-items:center}
+    .story-text{color:var(--white)}
+    .story-eyebrow{font-family:'Nunito',sans-serif;font-weight:800;font-size:15px;letter-spacing:2px;text-transform:uppercase;margin-bottom:16px;opacity:0.85}
+    .story-text h2{font-family:'Fredoka One',cursive;font-size:clamp(36px,5.5vw,68px);line-height:1.1;margin-bottom:24px}
+    .story-text p{font-size:clamp(16px,1.8vw,20px);line-height:1.7;margin-bottom:16px;opacity:0.92}
+    .story-punchline{font-weight:800;font-style:italic}
+    .story-visuals{position:relative;min-height:360px;display:flex;align-items:center;justify-content:center}
+    #char-spin{width:clamp(220px,30vw,360px);mix-blend-mode:multiply;animation:spin360 1.8s linear infinite;filter:drop-shadow(0 0 30px rgba(var(--yellow-rgb),0.6));position:absolute}
+    #char-fall{width:clamp(220px,30vw,360px);mix-blend-mode:multiply;opacity:0;animation:wobble 1s ease-in-out infinite alternate;animation-play-state:paused;position:absolute}
+    #flavor{background:var(--yellow);padding:80px clamp(20px,5vw,80px);text-align:center}
+    .flavor-eyebrow{font-family:'Nunito',sans-serif;font-weight:900;font-size:16px;letter-spacing:3px;text-transform:uppercase;color:var(--purple);margin-bottom:16px}
+    #flavor h2{font-family:'Fredoka One',cursive;font-size:clamp(48px,8vw,100px);color:var(--dark);line-height:1;margin-bottom:8px}
+    #flavor h3{font-family:'Fredoka One',cursive;font-size:clamp(28px,4.8vw,60px);color:var(--purple);margin-bottom:48px}
+    .flavor-stage{position:relative;display:inline-flex;align-items:center;justify-content:center;margin-bottom:48px}
+    .spotlight{position:absolute;width:260px;height:260px;border-radius:50%;opacity:0;pointer-events:none}
+    .spotlight-1{background:radial-gradient(circle,rgba(var(--pink-rgb),0.35) 0%,transparent 70%);top:-40px;left:-60px}
+    .spotlight-2{background:radial-gradient(circle,rgba(var(--blue-rgb),0.30) 0%,transparent 70%);top:-40px;right:-60px}
+    .spotlight-3{background:radial-gradient(circle,rgba(var(--purple-rgb),0.30) 0%,transparent 70%);bottom:-40px;left:-40px}
+    .spotlight-4{background:radial-gradient(circle,rgba(var(--orange-rgb),0.30) 0%,transparent 70%);bottom:-40px;right:-40px}
+    #flavor-box{width:clamp(220px,30vw,380px);position:relative;z-index:2;cursor:pointer;animation:rotateBox3D 8s linear infinite;transform-style:preserve-3d}
+    #flavor-box:hover{animation-play-state:paused}
+    .flavor-badges{display:flex;flex-wrap:wrap;justify-content:center;gap:16px}
+    .badge{font-family:'Fredoka One',cursive;font-size:clamp(16px,2vw,22px);padding:14px 28px;border-radius:60px;opacity:0;transform:translateY(30px)}
+    .badge-1{background:var(--pink);color:var(--white)}
+    .badge-2{background:var(--dark);color:var(--white)}
+    .badge-3{background:var(--blue);color:var(--white)}
+    #reviews{background:var(--purple);padding:80px clamp(20px,5vw,80px);text-align:center}
+    #reviews h2{font-family:'Fredoka One',cursive;font-size:clamp(36px,5.5vw,64px);color:var(--white);margin-bottom:48px}
+    .reviews-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:24px;max-width:1100px;margin:0 auto}
+    .review-card{background:var(--white);border-radius:24px;padding:32px;text-align:left;opacity:0;transform:translateY(50px);transition:transform 0.3s,box-shadow 0.3s}
+    .review-card:hover{transform:translateY(-8px);box-shadow:0 20px 50px rgba(0,0,0,0.15)}
+    .review-stars{font-size:22px;color:var(--yellow);margin-bottom:14px}
+    .review-text{font-size:16px;line-height:1.6;color:var(--dark);margin-bottom:16px}
+    .review-author{font-family:'Nunito',sans-serif;font-weight:800;font-size:14px;color:var(--purple)}
+    #footer-section{background:var(--dark);padding:70px clamp(20px,5vw,80px) 0;text-align:center}
+    .footer-logo{height:60px;width:auto;margin:0 auto 20px}
+    .footer-tagline{font-family:'Fredoka One',cursive;font-size:clamp(16px,2.5vw,22px);color:rgba(var(--white-rgb),0.55);margin-bottom:40px}
+    .footer-char-wrap{position:relative;display:inline-block}
+    #footer-char{width:clamp(180px,25vw,320px);mix-blend-mode:multiply;display:block}
+    .heart{position:absolute;font-size:28px;animation:floatHeart 2s ease-out infinite;pointer-events:none}
+    .heart-1{left:-10px;top:20px;animation-delay:0s}
+    .heart-2{left:50%;top:0;animation-delay:0.5s}
+    .heart-3{right:-10px;top:30px;animation-delay:1s}
+    .footer-bar{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;padding-top:20px;border-top:1px solid rgba(var(--white-rgb),0.1);margin-top:32px}
+    .footer-bar span,.footer-bar a{font-family:'Nunito',sans-serif;font-size:13px;color:rgba(var(--white-rgb),0.35);text-decoration:none}
+    .footer-bar a:hover{color:rgba(var(--white-rgb),0.7)}
+    @media(max-width:700px){.story-inner{grid-template-columns:1fr}.story-visuals{order:-1}#hero-char{display:none}.reviews-grid{grid-template-columns:1fr}}
+    @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:0.01ms!important;animation-iteration-count:1!important;transition-duration:0.01ms!important}}
+  </style>
+</head>
+<body>
+  <nav id="nav">
+    <img src="logo.png" alt="FLOCKSTAR Logo" />
+    <a href="#" class="nav-cta">Jetzt snacken 🍓</a>
+  </nav>
+  <section id="hero">
+    <div class="hero-stage">
+      <img src="box.png" id="hero-box" alt="FLOCKSTAR Kornflakes Box" />
+      <img src="char-headspin.png" id="hero-char" alt="FLOCKSTAR Maskottchen" />
+    </div>
+    <div class="hero-copy">
+      <h1 class="hero-headline">
+        <span class="word"><span class="word-inner">Das</span></span>
+        <span class="word"><span class="word-inner highlight">Frühstück</span></span>
+        <span class="word"><span class="word-inner">das</span></span>
+        <span class="word"><span class="word-inner">dich</span></span>
+        <span class="word"><span class="word-inner highlight">anschaut.</span></span>
+      </h1>
+      <p id="hero-sub">Himbeer Joghurt mit Schokostückchen – NEU! Explosive Frucht!</p>
+      <a href="#" id="hero-cta">Jetzt snacken 🍓</a>
+      <span id="scroll-indicator">↓ scroll</span>
+    </div>
+  </section>
+  <svg class="divider" viewBox="0 0 1440 80" preserveAspectRatio="none" style="background:var(--white)"><path d="M0,20 C360,80 1080,0 1440,20 L1440,80 L0,80 Z" fill="var(--pink)"/></svg>
+  <section id="story">
+    <div class="story-inner">
+      <div class="story-text">
+        <p class="story-eyebrow">🍓 Wer ist FLOCKSTAR?</p>
+        <h2>Zu gut um wahr zu sein.</h2>
+        <p>FLOCKSTAR ist nicht einfach Frühstück. Es ist ein Statement. Ein Lebensgefühl. Ein kleiner Kerl auf der Schachtel, der dich jeden Morgen anschaut und fragt: <em>Bist du bereit?</em></p>
+        <p>Echte Himbeeren. Echte Schokostückchen. Echter Joghurt-Geschmack. Alles in einer Bowl. <span class="story-punchline">...na ja, fast immer. 😅</span></p>
+      </div>
+      <div class="story-visuals">
+        <img src="char-headspin.png" id="char-spin" alt="Maskottchen macht Headspin" />
+        <img src="char-fallen.png" id="char-fall" alt="Maskottchen gefallen und verlegen" />
+      </div>
+    </div>
+  </section>
+  <svg class="divider" viewBox="0 0 1440 80" preserveAspectRatio="none" style="background:var(--pink)"><path d="M0,60 C480,0 960,80 1440,20 L1440,80 L0,80 Z" fill="var(--yellow)"/></svg>
+  <section id="flavor">
+    <p class="flavor-eyebrow">✨ Unsere Sorte ✨</p>
+    <h2>Himbeer Joghurt</h2>
+    <h3>mit Schokostückchen</h3>
+    <div class="flavor-stage">
+      <div class="spotlight spotlight-1"></div>
+      <div class="spotlight spotlight-2"></div>
+      <div class="spotlight spotlight-3"></div>
+      <div class="spotlight spotlight-4"></div>
+      <img src="box.png" id="flavor-box" alt="FLOCKSTAR Box dreht sich" />
+    </div>
+    <div class="flavor-badges">
+      <div class="badge badge-1">🍓 Echte Himbeeren</div>
+      <div class="badge badge-2">🍫 Schokostückchen</div>
+      <div class="badge badge-3">🥛 Joghurt Geschmack</div>
+    </div>
+  </section>
+  <svg class="divider" viewBox="0 0 1440 80" preserveAspectRatio="none" style="background:var(--yellow)"><path d="M0,40 C300,0 800,80 1440,30 L1440,80 L0,80 Z" fill="var(--purple)"/></svg>
+  <section id="reviews">
+    <h2>Was alle sagen: 💬</h2>
+    <div class="reviews-grid">
+      <div class="review-card"><div class="review-stars">★★★★★</div><p class="review-text">"Endlich ein Frühstück das ich NICHT verstecken muss wenn Freunde kommen."</p><p class="review-author">— Leon, 16</p></div>
+      <div class="review-card"><div class="review-stars">★★★★★</div><p class="review-text">"Hab das Maskottchen heute morgen um 7 Uhr angewunken. Keine Reue."</p><p class="review-author">— Sarah, 24</p></div>
+      <div class="review-card"><div class="review-stars">★★★★★</div><p class="review-text">"Meine Mutter hasst ihn. Mein Freundeskreis liebt ihn. Das sagt alles."</p><p class="review-author">— Max, 19</p></div>
+    </div>
+  </section>
+  <svg class="divider" viewBox="0 0 1440 80" preserveAspectRatio="none" style="background:var(--purple)"><path d="M0,20 C500,80 900,0 1440,50 L1440,80 L0,80 Z" fill="var(--dark)"/></svg>
+  <footer id="footer-section">
+    <img src="logo.png" class="footer-logo" alt="FLOCKSTAR" />
+    <p class="footer-tagline">Das Frühstück das zurückschaut.</p>
+    <div class="footer-char-wrap">
+      <img src="char-footer.png" id="footer-char" alt="FLOCKSTAR Maskottchen liegt entspannt" />
+      <span class="heart heart-1">💖</span>
+      <span class="heart heart-2">💛</span>
+      <span class="heart heart-3">💜</span>
+    </div>
+    <div class="footer-bar">
+      <span>© 2026 FLOCKSTAR</span>
+      <a href="https://oddomode.de" target="_blank" rel="noopener">Made with 🍓 by Oddomode</a>
+    </div>
+  </footer>
+  <script>
+    gsap.registerPlugin(ScrollTrigger);
+    gsap.set('#hero-box',{scale:0.3,opacity:0});
+    gsap.set('#hero-char',{x:80,opacity:0});
+    gsap.set('#hero-cta',{scale:0,opacity:0});
+    const tl=gsap.timeline();
+    tl.to('#nav',{y:0,duration:0.7,delay:0.2,ease:'power2.out'})
+      .to('#hero-box',{scale:1,opacity:1,duration:0.8,ease:'back.out(1.4)'},'-=0.3')
+      .to('#hero-char',{x:0,opacity:1,duration:0.7,ease:'power2.out'},'-=0.5')
+      .to('.word-inner',{y:0,opacity:1,stagger:0.12,duration:0.7,ease:'power3.out'},'-=0.4')
+      .to('#hero-sub',{opacity:1,y:0,duration:0.6,ease:'power2.out'},'-=0.2')
+      .to('#hero-cta',{scale:1,opacity:1,duration:0.7,ease:'back.out(1.7)'},'-=0.2')
+      .to('#scroll-indicator',{opacity:1,duration:0.5},'-=0.1');
+    gsap.from('.story-text',{x:-60,opacity:0,duration:0.9,ease:'power3.out',scrollTrigger:{trigger:'#story',start:'top 70%'}});
+    gsap.set('#char-fall',{opacity:0});
+    ScrollTrigger.create({trigger:'#story',start:'40% center',onEnter(){gsap.to('#char-spin',{opacity:0,duration:0.4});gsap.to('#char-fall',{opacity:1,duration:0.6,ease:'back.out(1.4)',onStart(){document.getElementById('char-fall').style.animationPlayState='running'}})},onLeaveBack(){gsap.to('#char-fall',{opacity:0,duration:0.3});gsap.to('#char-spin',{opacity:1,duration:0.5});document.getElementById('char-fall').style.animationPlayState='paused'}});
+    gsap.to('.spotlight',{opacity:1,duration:0.6,stagger:0.3,scrollTrigger:{trigger:'#flavor',start:'top 70%'}});
+    gsap.to('.badge',{opacity:1,y:0,duration:0.6,stagger:0.15,ease:'back.out(1.3)',scrollTrigger:{trigger:'.flavor-badges',start:'top 80%'}});
+    gsap.to('.review-card',{opacity:1,y:0,duration:0.7,stagger:0.2,ease:'power3.out',scrollTrigger:{trigger:'#reviews',start:'top 70%'}});
+    (function(){const C=['#FF2D9B','#FFE600','#00C2FF','#9B2DFF','#FF6B00','#C8F135'],N=35,cv=document.createElement('canvas');cv.style.cssText='position:fixed;inset:0;z-index:999;pointer-events:none;';document.body.appendChild(cv);const r=new THREE.WebGLRenderer({canvas:cv,alpha:true,antialias:true});r.setPixelRatio(Math.min(devicePixelRatio,2));r.setSize(innerWidth,innerHeight);const s=new THREE.Scene(),cam=new THREE.PerspectiveCamera(60,innerWidth/innerHeight,0.1,100);cam.position.z=5;function mk(h){const c=document.createElement('canvas');c.width=c.height=32;const x=c.getContext('2d');x.fillStyle=h;x.beginPath();x.arc(16,16,16,0,Math.PI*2);x.fill();return new THREE.CanvasTexture(c)}const ps=[];for(let i=0;i<N;i++){const h=C[Math.floor(Math.random()*C.length)],g=new THREE.BufferGeometry(),p=new Float32Array(3);p[0]=(Math.random()-0.5)*10;p[1]=(Math.random()-0.5)*8+4;p[2]=(Math.random()-0.5)*2;g.setAttribute('position',new THREE.BufferAttribute(p,3));const m=new THREE.PointsMaterial({size:0.05+Math.random()*0.13,map:mk(h),transparent:true,depthWrite:false,alphaTest:0.1}),pt=new THREE.Points(g,m);s.add(pt);ps.push({mesh:pt,pos:p,vy:-(0.005+Math.random()*0.012),vx:(Math.random()-0.5)*0.003,rot:(Math.random()-0.5)*0.02,px:0,py:0})}const mu=new THREE.Vector2(9999,9999);window.addEventListener('mousemove',e=>{mu.x=(e.clientX/innerWidth-0.5)*2;mu.y=-(e.clientY/innerHeight-0.5)*2});function sw(nx,ny){const f=cam.fov*Math.PI/180,h=Math.tan(f/2)*cam.position.z;return{wx:nx*h*cam.aspect,wy:ny*h}}window.addEventListener('resize',()=>{cam.aspect=innerWidth/innerHeight;cam.updateProjectionMatrix();r.setSize(innerWidth,innerHeight)});const cl=new THREE.Clock();(function a(){requestAnimationFrame(a);const d=cl.getDelta();if(d<1/55){const{wx,wy}=sw(mu.x,mu.y);for(let i=0;i<N;i++){const p=ps[i],po=p.pos,dx=po[0]-wx,dy=po[1]-wy,dist=Math.sqrt(dx*dx+dy*dy);if(dist<1.5&&dist>0){const f=(1.5-dist)/1.5*0.08;p.px+=(dx/dist)*f;p.py+=(dy/dist)*f}p.px*=0.92;p.py*=0.92;po[0]+=p.vx+p.px;po[1]+=p.vy+p.py;p.mesh.rotation.z+=p.rot;if(po[1]<-5){po[1]=5+Math.random();po[0]=(Math.random()-0.5)*10}p.mesh.geometry.attributes.position.needsUpdate=true}}r.render(s,cam)})()})();
+  </script>
+</body>
+</html>

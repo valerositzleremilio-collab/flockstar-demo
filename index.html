@@ -46,6 +46,13 @@
       --orange: #FF6B00;
       --dark:   #1a0028;
       --white:  #FFFFFF;
+      /* RGB channels for rgba() usage */
+      --pink-rgb:   255, 45, 155;
+      --yellow-rgb: 255, 230, 0;
+      --blue-rgb:   0, 194, 255;
+      --purple-rgb: 155, 45, 255;
+      --orange-rgb: 255, 107, 0;
+      --white-rgb:  255, 255, 255;
     }
 
     /* ══ RESET ══ */
@@ -99,9 +106,9 @@
     }
 
     @keyframes pulse-ring {
-      0%   { box-shadow: 0 0 0 0   rgba(255, 45, 155, 0.6); }
-      70%  { box-shadow: 0 0 0 18px rgba(255, 45, 155, 0);   }
-      100% { box-shadow: 0 0 0 0   rgba(255, 45, 155, 0);   }
+      0%   { box-shadow: 0 0 0 0    rgba(var(--pink-rgb), 0.6); }
+      70%  { box-shadow: 0 0 0 18px rgba(var(--pink-rgb), 0);   }
+      100% { box-shadow: 0 0 0 0    rgba(var(--pink-rgb), 0);   }
     }
 
     /* ══ NAV ══ */
@@ -111,7 +118,7 @@
       left: 0;
       right: 0;
       height: 64px;
-      background: rgba(255, 255, 255, 0.92);
+      background: rgba(var(--white-rgb), 0.92);
       backdrop-filter: blur(14px);
       -webkit-backdrop-filter: blur(14px);
       border-bottom: 3px solid var(--yellow);
@@ -164,7 +171,7 @@
     #hero-box {
       width: clamp(200px, 28vw, 380px);
       animation: floatBox 3s ease-in-out infinite alternate;
-      filter: drop-shadow(0 30px 40px rgba(255, 45, 155, 0.25));
+      filter: drop-shadow(0 30px 40px rgba(var(--pink-rgb), 0.25));
       transition: transform 0.3s ease;
       cursor: pointer;
     }
@@ -324,7 +331,7 @@
       width: clamp(220px, 30vw, 360px);
       mix-blend-mode: multiply;
       animation: spin360 1.8s linear infinite;
-      filter: drop-shadow(0 0 30px rgba(255, 230, 0, 0.6));
+      filter: drop-shadow(0 0 30px rgba(var(--yellow-rgb), 0.6));
       position: absolute;
     }
 
@@ -395,10 +402,10 @@
       pointer-events: none;
     }
 
-    .spotlight-1 { background: radial-gradient(circle, rgba(255,45,155,0.35) 0%, transparent 70%);  top: -40px; left: -60px; }
-    .spotlight-2 { background: radial-gradient(circle, rgba(0,194,255,0.3) 0%, transparent 70%);   top: -40px; right: -60px; }
-    .spotlight-3 { background: radial-gradient(circle, rgba(155,45,255,0.3) 0%, transparent 70%);  bottom: -40px; left: -40px; }
-    .spotlight-4 { background: radial-gradient(circle, rgba(255,107,0,0.3) 0%, transparent 70%);   bottom: -40px; right: -40px; }
+    .spotlight-1 { background: radial-gradient(circle, rgba(var(--pink-rgb),   0.35) 0%, transparent 70%); top: -40px;    left:  -60px; }
+    .spotlight-2 { background: radial-gradient(circle, rgba(var(--blue-rgb),   0.30) 0%, transparent 70%); top: -40px;    right: -60px; }
+    .spotlight-3 { background: radial-gradient(circle, rgba(var(--purple-rgb), 0.30) 0%, transparent 70%); bottom: -40px; left:  -40px; }
+    .spotlight-4 { background: radial-gradient(circle, rgba(var(--orange-rgb), 0.30) 0%, transparent 70%); bottom: -40px; right: -40px; }
 
     #flavor-box {
       width: clamp(220px, 30vw, 380px);
@@ -515,7 +522,7 @@
     .footer-tagline {
       font-family: 'Fredoka One', cursive;
       font-size: clamp(16px, 2.5vw, 22px);
-      color: rgba(255, 255, 255, 0.55);
+      color: rgba(var(--white-rgb), 0.55);
       margin-bottom: 40px;
     }
 
@@ -549,7 +556,7 @@
       flex-wrap: wrap;
       gap: 8px;
       padding-top: 20px;
-      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      border-top: 1px solid rgba(var(--white-rgb), 0.1);
       margin-top: 32px;
     }
 
@@ -557,12 +564,12 @@
     .footer-bar a {
       font-family: 'Nunito', sans-serif;
       font-size: 13px;
-      color: rgba(255, 255, 255, 0.35);
+      color: rgba(var(--white-rgb), 0.35);
       text-decoration: none;
     }
 
     .footer-bar a:hover {
-      color: rgba(255, 255, 255, 0.7);
+      color: rgba(var(--white-rgb), 0.7);
     }
 
     /* ══ RESPONSIVE ══ */
@@ -704,7 +711,7 @@
     <img src="logo.png" class="footer-logo" alt="FLOCKSTAR" />
     <p class="footer-tagline">Das Frühstück das zurückschaut.</p>
     <div class="footer-char-wrap">
-      <img src="char-footer.png" id="footer-char" alt="FLOCKSTAR Charakter" />
+      <img src="char-footer.png" id="footer-char" alt="FLOCKSTAR Charakter liegt entspannt" />
       <span class="heart heart-1">💖</span>
       <span class="heart heart-2">💛</span>
       <span class="heart heart-3">💜</span>
@@ -837,7 +844,6 @@
 
       /* particle data */
       const particles = [];
-      const groups    = [];
 
       for (let i = 0; i < COUNT; i++) {
         const hex     = COLORS[Math.floor(Math.random() * COLORS.length)];
@@ -894,9 +900,8 @@
 
       /* animate */
       const clock = new THREE.Clock();
-      let lastTime = 0;
 
-      function animate(now) {
+      function animate() {
         requestAnimationFrame(animate);
         const delta = clock.getDelta();
         if (delta < 1 / 55) {
@@ -934,7 +939,7 @@
         renderer.render(scene, camera);
       }
 
-      animate(0);
+      animate();
     })();
   </script>
 
